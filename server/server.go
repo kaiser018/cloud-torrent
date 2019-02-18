@@ -16,8 +16,8 @@ import (
 	"time"
 
 	"github.com/NYTimes/gziphandler"
-	"github.com/jpillora/cloud-torrent/engine"
-	"github.com/jpillora/cloud-torrent/static"
+	"github.com/kaiser018/cloud-torrent/engine"
+	"github.com/kaiser018/cloud-torrent/static"
 	"github.com/jpillora/cookieauth"
 	"github.com/jpillora/requestlog"
 	"github.com/jpillora/scraper/scraper"
@@ -174,7 +174,7 @@ func (s *Server) Run(version string) error {
 	if s.Log {
 		h = requestlog.Wrap(h)
 	}
-	log.Printf("Listening at %s://%s", proto, addr)
+	log.Printf("Kaiser Dapar Listening at %s://%s", proto, addr)
 	//serve!
 	server := http.Server{
 		//disable http2 due to velox bug
@@ -207,7 +207,9 @@ func (s *Server) reconfigure(c engine.Config) error {
 }
 
 func (s *Server) handle(w http.ResponseWriter, r *http.Request) {
-	
+
+	log.Printf(r.URL.Path)
+
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	//handle realtime client library

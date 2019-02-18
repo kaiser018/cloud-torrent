@@ -13,10 +13,11 @@ import (
 // all static/ files embedded as a Go library
 func FileSystemHandler() http.Handler {
 	var h http.Handler
-	if info, err := os.Stat("static/files/"); err == nil && info.IsDir() {
+	if info, err := os.Stat("/go/src/github.com/kaiser018/cloud-torrent/static/files/"); err == nil && info.IsDir() {
 		log.Println("Using local static files")
-		h = http.FileServer(http.Dir("static/files/"))
+		h = http.FileServer(http.Dir("/go/src/github.com/kaiser018/cloud-torrent/static/files/"))
 	} else {
+		log.Println(err)
 		h = http.FileServer(&assetfs.AssetFS{Asset: Asset, AssetDir: AssetDir, AssetInfo: AssetInfo, Prefix: "files"})
 	}
 	return h

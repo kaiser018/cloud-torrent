@@ -3,5 +3,29 @@ version: '3'
 services:
   cloudtorrent:
     build: .
+    volumes:
+     - ./static/files/:/go/src/github.com/kaiser018/cloud-torrent/static/files
+     - ./downloads:/go/downloads
+    expose:
+      - '3000'
     ports:
      - "63001:3000"
+
+  socket:
+    build: ./websocket
+    volumes:
+      - ./websocket/:/usr/src/app
+    restart: always
+    expose:
+      - '3000'
+    links:
+      - redis
+      - cloudtorrent
+    ports:
+     - "63002:3000"
+
+  redis:
+    image: redis:alpine
+    restart: always
+    expose:
+      - '6379'
