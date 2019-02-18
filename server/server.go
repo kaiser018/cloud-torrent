@@ -207,6 +207,9 @@ func (s *Server) reconfigure(c engine.Config) error {
 }
 
 func (s *Server) handle(w http.ResponseWriter, r *http.Request) {
+	
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	//handle realtime client library
 	if r.URL.Path == "/js/velox.js" {
 		velox.JS.ServeHTTP(w, r)

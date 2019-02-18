@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  cloudtorrent:
+    build: .
+    ports:
+     - "63001:3000"

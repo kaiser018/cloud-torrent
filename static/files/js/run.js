@@ -8,9 +8,11 @@ app.run(function($rootScope, search, api) {
   $scope.state = {};
   $scope.hasConnected = false;
   var v = velox("/sync", $scope.state);
+  
   v.onupdate = function() {
     $scope.$applyAsync();
   };
+
   v.onchange = function(connected) {
     if (connected) {
       $scope.hasConnected = true;
