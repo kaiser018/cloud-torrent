@@ -7,19 +7,19 @@ import (
 
 type Torrent struct {
 	//anacrolix/torrent
-	InfoHash   string 				`json:"infoHash"`
-	Name       string				`json:"name"`
-	Loaded     bool					`json:"loaded"`
-	Downloaded int64				`json:"downloaded"`
-	Size       int64				`json:"size"`
-	Files      []*File				`json:"files"`
+	InfoHash   string 				// `json:"infoHash"`
+	Name       string				// `json:"name"`
+	Loaded     bool					// `json:"loaded"`
+	Downloaded int64				// `json:"downloaded"`
+	Size       int64				// `json:"size"`
+	Files      []*File				// `json:"files"`
 	//cloud torrent
-	Started      bool				`json:"started"`
-	Dropped      bool				`json:"dropped"`
-	Percent      float32			`json:"percent"`
-	DownloadRate float32			`json:"downloadRate"`
+	Started      bool				// `json:"started"`
+	Dropped      bool				// `json:"dropped"`
+	Percent      float32			// `json:"percent"`
+	DownloadRate float32			// `json:"downloadRate"`
 	t            *torrent.Torrent
-	updatedAt    time.Time			`json:"updatedAt"`
+	updatedAt    time.Time			// `json:"updatedAt"`
 }
 
 type File struct {
