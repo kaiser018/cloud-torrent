@@ -43,6 +43,31 @@ app.all('/emit', function(req, res) {
 
 });
 
+var config = {};
+var searchProviders = {};
+
+var foo   = {};
+var v     = velox("http://cloudtorrent:3000/sync", foo);
+
+v.onupdate = function(object) {
+
+	// console.log('onupdate', object);
+
+	config = object.Config;
+	searchProviders = object.SearchProviders;
+
+	io.sockets.emit('update', object);
+	io.sockets.emit('downloads', object.Downloads);
+	io.sockets.emit('stats', object.Stats);
+	io.sockets.emit('torrents', object.Torrents);
+	io.sockets.emit('users', object.Users);
+	
+};
+
+v.onconnect = function(object) {
+	console.log('onconnect');
+};
+
 io.on('connection', function(socket) {
 
 	console.log('a connection has been created: ' + io.engine.clientsCount);
@@ -66,16 +91,7 @@ io.on('connection', function(socket) {
 		console.log('a connection has been terminated: ' + io.engine.clientsCount);
 	});
 
+	socket.emit('config', config);
+	socket.emit('searchProviders', searchProviders);
+
 });
-
-var foo   = {};
-var v     = velox("http://cloudtorrent:3000/sync", foo);
-
-v.onupdate = function(object) {
-	console.log('onupdate', object.Torrents);
-	io.sockets.emit('update', object);
-};
-
-v.onconnect = function(object) {
-	console.log('onconnect');
-};

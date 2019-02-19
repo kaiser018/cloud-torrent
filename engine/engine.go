@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"sync"
 	"time"
-
+	"encoding/json"
 	"github.com/anacrolix/dht"
 	"github.com/anacrolix/torrent"
 	"github.com/anacrolix/torrent/metainfo"
@@ -64,31 +64,42 @@ func (e *Engine) Configure(c Config) error {
 	return nil
 }
 
-func (e *Engine) NewMagnet(magnetURI string) error {
+func (e *Engine) NewMagnet(magnetURI string) (string, error) {
 	tt, err := e.client.AddMagnet(magnetURI)
 	if err != nil {
-		return err
+		return "", err
 	}
 	return e.newTorrent(tt)
 }
 
-func (e *Engine) NewTorrent(spec *torrent.TorrentSpec) error {
+func (e *Engine) NewTorrent(spec *torrent.TorrentSpec) (string, error) {
 	tt, _, err := e.client.AddTorrentSpec(spec)
 	if err != nil {
-		return err
+		return "", err
 	}
 	return e.newTorrent(tt)
 }
 
-func (e *Engine) newTorrent(tt *torrent.Torrent) error {
+func (e *Engine) newTorrent(tt *torrent.Torrent) (string, error) {
+
+	// ih := tt.InfoHash().HexString()
+
 	t := e.upsertTorrent(tt)
+
 	go func() {
 		<-t.t.GotInfo()
 		// if e.config.AutoStart && !loaded && torrent.Loaded && !torrent.Started {
 		e.StartTorrent(t.InfoHash)
 		// }
 	}()
-	return nil
+
+	out, err := json.Marshal(t)
+
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%s",out), nil
 }
 
 //GetTorrents moves torrents out of the anacrolix/torrent

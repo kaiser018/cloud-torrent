@@ -239,9 +239,9 @@ func (s *Server) handle(w http.ResponseWriter, r *http.Request) {
 	//api call
 	if strings.HasPrefix(r.URL.Path, "/api/") {
 		//only pass request in, expect error out
-		if err := s.api(r); err == nil {
+		if out,err := s.api(r); err == nil {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte("OK"))
+			w.Write([]byte(out))
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
 			w.Write([]byte(err.Error()))
